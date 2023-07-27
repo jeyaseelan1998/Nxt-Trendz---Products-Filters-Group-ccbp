@@ -6,8 +6,7 @@ const FiltersGroup = props => {
   const { filterByCategory,
     filterByRating,
     updateSearchInput,
-    activeCategoryId,
-    activeRatingId,
+    clearFilters,
     getProducts } = props
 
     const onChangeInput = event => updateSearchInput(event.target.value)
@@ -22,6 +21,8 @@ const FiltersGroup = props => {
     }
 
     const onClickRating = (ratingId) => filterByRating(ratingId)
+
+    const onclickClearBtn = () => clearFilters()
 
   const renderSearchInput = () => {
     const {searchInput} = props
@@ -72,6 +73,7 @@ const FiltersGroup = props => {
       {renderCategoryButtons()}
       <h1 className='form-group-heading'>Rating</h1>
       {renderRatingButtons()}
+      <button onClick={onclickClearBtn}>Clear Filters</button>
     </div >
   )
 }

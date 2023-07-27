@@ -115,6 +115,10 @@ class AllProductsSection extends Component {
     }
   }
 
+  clearFilters = () => {
+    this.setState({searchInput:'', activeCategoryId:'', activeRatingId:''}, this.getProducts)
+  }
+
   changeSortby = activeOptionId => {
     this.setState({ activeOptionId }, this.getProducts)
   }
@@ -211,6 +215,7 @@ class AllProductsSection extends Component {
           getProducts={this.getProducts}
           categoryOptions={categoryOptions}
           ratingsList={ratingsList}
+          clearFilters={this.clearFilters}
         />
         {this.renderViews()}
       </div>
