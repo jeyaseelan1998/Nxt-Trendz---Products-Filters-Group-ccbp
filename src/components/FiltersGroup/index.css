@@ -12,3 +12,79 @@
 }
 
 /* Write your CSS here */
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  background-color: #64748b30;
+  max-width: 75%;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.search-input {
+  padding: 5px;
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.icon {
+  margin-left: 5px;
+  height: 15px;
+  width: 15px;
+}
+
+.form-group-heading {
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.category-options-list {
+  padding-left: 0;
+  list-style: none;
+  margin-top: 10px;
+}
+
+.category-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  padding-left: 0;
+}
+
+.rating-image {
+  width: 150px;
+  margin-right: 5px;
+}
+
+.rating-buttons {
+  padding-left: 0;
+  list-style: none;
+}
+
+.rating-button {
+  padding-left: 0;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.rating-button p {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 14px;
+  color: #475569;
+}

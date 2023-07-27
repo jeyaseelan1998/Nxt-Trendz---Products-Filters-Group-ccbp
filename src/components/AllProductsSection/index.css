@@ -48,3 +48,24 @@
   flex-wrap: wrap;
   padding-left: 0;
 }
+
+.failure-view-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.products-failure-image {
+  max-width: 350px;
+}
+
+.failure-view-container h1 {
+  max-width: 450px;
+  font-size: 28px;
+}
+
+.failure-view-container p {
+  max-width: 450px;
+}

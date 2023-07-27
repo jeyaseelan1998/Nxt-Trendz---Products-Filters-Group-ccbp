@@ -1,4 +1,4 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 
@@ -68,8 +68,11 @@ const ratingsList = [
 class AllProductsSection extends Component {
   state = {
     productsList: [],
-    isLoading: false,
     activeOptionId: sortbyOptions[0].optionId,
+    activeCategoryId: '',
+    activeRatingId: '',
+    searchInput: '',
+    apiStatus: 'INITIAL'
   }
 
   componentDidMount() {
@@ -78,14 +81,14 @@ class AllProductsSection extends Component {
 
   getProducts = async () => {
     this.setState({
-      isLoading: true,
+      apiStatus: 'INITIAL',
     })
     const jwtToken = Cookies.get('jwt_token')
 
     // TODO: Update the code to get products with filters applied
 
-    const {activeOptionId} = this.state
-    const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}`
+    const { activeOptionId, activeCategoryId, activeRatingId, searchInput } = this.state
+    const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -105,17 +108,31 @@ class AllProductsSection extends Component {
       }))
       this.setState({
         productsList: updatedData,
-        isLoading: false,
+        apiStatus: 'SUCCESS',
       })
+    } else {
+      this.setState({ apiStatus: 'FAILURE' })
     }
   }
 
   changeSortby = activeOptionId => {
-    this.setState({activeOptionId}, this.getProducts)
+    this.setState({ activeOptionId }, this.getProducts)
+  }
+
+  filterByCategory = categoryId => {
+    this.setState({ activeCategoryId: categoryId }, this.getProducts)
+  }
+
+  filterByRating = ratingId => {
+    this.setState({ activeRatingId: ratingId }, this.getProducts)
+  }
+
+  updateSearchInput = value => {
+    this.setState({ searchInput: value })
   }
 
   renderProductsList = () => {
-    const {productsList, activeOptionId} = this.state
+    const { productsList, activeOptionId } = this.state
 
     // TODO: Add No Products View
     return (
@@ -142,15 +159,60 @@ class AllProductsSection extends Component {
 
   // TODO: Add failure view
 
+  renderFaliure = () => (
+    <div className='failure-view-container'>
+      <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-error-view.png" alt='products failure' className='products-failure-image' />
+      <h1>
+        Oops! Something Went Wrong
+      </h1>
+      <p>
+        We are having some trouble processing your request.
+        Please try again.
+      </p>
+    </div>
+  )
+
+  renderNoProductsView = () => (
+    <div className='failure-view-container'>
+      <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-no-products-view.png" alt='no products' className='products-failure-image' />
+      <h1>
+        No Products Found
+      </h1>
+      <p>
+        We could not find any products. Try other filters.
+      </p>
+    </div>
+  )
+
+  renderViews = () => {
+    const { apiStatus, productsList } = this.state
+    switch (apiStatus) {
+      case "SUCCESS":
+        return productsList.length !== 0 ? this.renderProductsList() : this.renderNoProductsView()
+      case "FAILURE":
+        return this.renderFaliure()
+      default:
+        return this.renderLoader()
+    }
+  }
+
   render() {
-    const {isLoading} = this.state
+    const { isLoading, activeCategoryId, activeRatingId, searchInput } = this.state
 
     return (
       <div className="all-products-section">
-        {/* TODO: Update the below element */}
-        <FiltersGroup />
-
-        {isLoading ? this.renderLoader() : this.renderProductsList()}
+        <FiltersGroup
+          filterByCategory={this.filterByCategory}
+          filterByRating={this.filterByRating}
+          updateSearchInput={this.updateSearchInput}
+          activeCategoryId={activeCategoryId}
+          activeRatingId={activeRatingId}
+          searchInput={searchInput}
+          getProducts={this.getProducts}
+          categoryOptions={categoryOptions}
+          ratingsList={ratingsList}
+        />
+        {this.renderViews()}
       </div>
     )
   }
