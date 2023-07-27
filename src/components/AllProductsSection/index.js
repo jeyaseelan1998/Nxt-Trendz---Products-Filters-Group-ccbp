@@ -71,7 +71,7 @@ class AllProductsSection extends Component {
     activeOptionId: sortbyOptions[0].optionId,
     activeCategoryId: '',
     activeRatingId: '',
-    searchInput: '',
+    titleSearch: '',
     apiStatus: 'INITIAL'
   }
 
@@ -87,8 +87,8 @@ class AllProductsSection extends Component {
 
     // TODO: Update the code to get products with filters applied
 
-    const { activeOptionId, activeCategoryId, activeRatingId, searchInput } = this.state
-    const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
+    const { activeOptionId, activeCategoryId, activeRatingId, titleSearch } = this.state
+    const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${titleSearch}&rating=${activeRatingId}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -116,7 +116,7 @@ class AllProductsSection extends Component {
   }
 
   clearFilters = () => {
-    this.setState({searchInput:'', activeCategoryId:'', activeRatingId:''}, this.getProducts)
+    this.setState({titleSearch:'', activeCategoryId:'', activeRatingId:''}, this.getProducts)
   }
 
   changeSortby = activeOptionId => {
@@ -132,7 +132,7 @@ class AllProductsSection extends Component {
   }
 
   updateSearchInput = value => {
-    this.setState({ searchInput: value })
+    this.setState({ titleSearch: value })
   }
 
   renderProductsList = () => {
@@ -201,7 +201,7 @@ class AllProductsSection extends Component {
   }
 
   render() {
-    const { isLoading, activeCategoryId, activeRatingId, searchInput } = this.state
+    const { isLoading, activeCategoryId, activeRatingId, titleSearch } = this.state
 
     return (
       <div className="all-products-section">
@@ -211,7 +211,7 @@ class AllProductsSection extends Component {
           updateSearchInput={this.updateSearchInput}
           activeCategoryId={activeCategoryId}
           activeRatingId={activeRatingId}
-          searchInput={searchInput}
+          titleSearch={titleSearch}
           getProducts={this.getProducts}
           categoryOptions={categoryOptions}
           ratingsList={ratingsList}

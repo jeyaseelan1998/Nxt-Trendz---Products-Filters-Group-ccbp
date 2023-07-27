@@ -25,10 +25,10 @@ const FiltersGroup = props => {
     const onclickClearBtn = () => clearFilters()
 
   const renderSearchInput = () => {
-    const {searchInput} = props
+    const {titleSearch} = props
     return (
     <form className='search-input-container' onSubmit={onSubmitHandler}>
-      <input type='search' placeholder='Search' className='search-input' onChange={onChangeInput} value={searchInput}/>
+      <input type='search' placeholder='Search' className='search-input' onChange={onChangeInput} value={titleSearch}/>
       <BsSearch className='icon' />
     </form>
   )}
