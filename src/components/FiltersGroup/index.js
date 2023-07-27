@@ -41,7 +41,7 @@ const FiltersGroup = props => {
         {
           categoryOptions.map(category => (
             <li>
-              <button className='category-button' onClick={() => onClickCategory(category.categoryId)}>{category.name}</button>
+              <p className='category-button' onClick={() => onClickCategory(category.categoryId)}>{category.name}</p>
             </li>
           ))
         }
