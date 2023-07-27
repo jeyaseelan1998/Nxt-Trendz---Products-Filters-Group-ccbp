@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 
@@ -65,6 +65,12 @@ const ratingsList = [
   },
 ]
 
+const apiStatuses = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+}
+
 class AllProductsSection extends Component {
   state = {
     productsList: [],
@@ -72,7 +78,7 @@ class AllProductsSection extends Component {
     activeCategoryId: '',
     activeRatingId: '',
     titleSearch: '',
-    apiStatus: 'INITIAL'
+    apiStatus: apiStatuses.initial,
   }
 
   componentDidMount() {
@@ -81,13 +87,18 @@ class AllProductsSection extends Component {
 
   getProducts = async () => {
     this.setState({
-      apiStatus: 'INITIAL',
+      apiStatus: apiStatuses.initial,
     })
     const jwtToken = Cookies.get('jwt_token')
 
     // TODO: Update the code to get products with filters applied
 
-    const { activeOptionId, activeCategoryId, activeRatingId, titleSearch } = this.state
+    const {
+      activeOptionId,
+      activeCategoryId,
+      activeRatingId,
+      titleSearch,
+    } = this.state
     const apiUrl = `https://apis.ccbp.in/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${titleSearch}&rating=${activeRatingId}`
     const options = {
       headers: {
@@ -108,35 +119,43 @@ class AllProductsSection extends Component {
       }))
       this.setState({
         productsList: updatedData,
-        apiStatus: 'SUCCESS',
+        apiStatus: apiStatuses.success,
       })
     } else {
-      this.setState({ apiStatus: 'FAILURE' })
+      this.setState({apiStatus: apiStatuses.failure})
     }
   }
 
   clearFilters = () => {
-    this.setState({titleSearch:'', activeCategoryId:'', activeRatingId:''}, this.getProducts)
+    this.setState(
+      {
+        titleSearch: '',
+        activeCategoryId: '',
+        activeRatingId: '',
+        activeOptionId: sortbyOptions[0].optionId,
+      },
+      this.getProducts,
+    )
   }
 
   changeSortby = activeOptionId => {
-    this.setState({ activeOptionId }, this.getProducts)
+    this.setState({activeOptionId}, this.getProducts)
   }
 
   filterByCategory = categoryId => {
-    this.setState({ activeCategoryId: categoryId }, this.getProducts)
+    this.setState({activeCategoryId: categoryId}, this.getProducts)
   }
 
   filterByRating = ratingId => {
-    this.setState({ activeRatingId: ratingId }, this.getProducts)
+    this.setState({activeRatingId: ratingId}, this.getProducts)
   }
 
   updateSearchInput = value => {
-    this.setState({ titleSearch: value })
+    this.setState({titleSearch: value})
   }
 
   renderProductsList = () => {
-    const { productsList, activeOptionId } = this.state
+    const {productsList, activeOptionId} = this.state
 
     // TODO: Add No Products View
     return (
@@ -164,36 +183,39 @@ class AllProductsSection extends Component {
   // TODO: Add failure view
 
   renderFaliure = () => (
-    <div className='failure-view-container'>
-      <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-error-view.png" alt='products failure' className='products-failure-image' />
-      <h1>
-        Oops! Something Went Wrong
-      </h1>
+    <div className="failure-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-products-error-view.png"
+        alt="products failure"
+        className="products-failure-image"
+      />
+      <h1>Oops! Something Went Wrong</h1>
       <p>
-        We are having some trouble processing your request.
-        Please try again.
+        We are having some trouble processing your request. Please try again.
       </p>
     </div>
   )
 
   renderNoProductsView = () => (
-    <div className='failure-view-container'>
-      <img src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-no-products-view.png" alt='no products' className='products-failure-image' />
-      <h1>
-        No Products Found
-      </h1>
-      <p>
-        We could not find any products. Try other filters.
-      </p>
+    <div className="failure-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/nxt-trendz/nxt-trendz-no-products-view.png"
+        alt="no products"
+        className="products-failure-image"
+      />
+      <h1>No Products Found</h1>
+      <p>We could not find any products. Try other filters.</p>
     </div>
   )
 
   renderViews = () => {
-    const { apiStatus, productsList } = this.state
+    const {apiStatus, productsList} = this.state
     switch (apiStatus) {
-      case "SUCCESS":
-        return productsList.length !== 0 ? this.renderProductsList() : this.renderNoProductsView()
-      case "FAILURE":
+      case apiStatuses.success:
+        return productsList.length !== 0
+          ? this.renderProductsList()
+          : this.renderNoProductsView()
+      case apiStatuses.failure:
         return this.renderFaliure()
       default:
         return this.renderLoader()
@@ -201,7 +223,12 @@ class AllProductsSection extends Component {
   }
 
   render() {
-    const { isLoading, activeCategoryId, activeRatingId, titleSearch } = this.state
+    const {
+      activeCategoryId,
+      activeRatingId,
+      titleSearch,
+      productsList,
+    } = this.state
 
     return (
       <div className="all-products-section">

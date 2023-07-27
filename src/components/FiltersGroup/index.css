@@ -88,3 +88,17 @@
   font-size: 14px;
   color: #475569;
 }
+
+.clear-filter-button {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0967d2;
+  padding: 8px 10px;
+  border: 1px solid #0967d2;
+  border-radius: 8px;
+}
+
+.submit-btn {
+  display: none;
+}
