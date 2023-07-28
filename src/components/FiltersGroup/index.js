@@ -1,4 +1,4 @@
-import {BsSearch, BsStarFill, BsStar} from 'react-icons/bs'
+import {BsSearch} from 'react-icons/bs'
 
 import './index.css'
 
@@ -9,14 +9,14 @@ const FiltersGroup = props => {
     updateSearchInput,
     clearFilters,
     getProducts,
-    titleSearch,
   } = props
 
-  // const onChangeInput =
-
-  const onSubmitHandler = event => {
-    event.preventDefault()
-    getProducts()
+  const onChangeEvent = event => {
+    if(event.key === "Enter") {
+      getProducts()
+      return
+    }
+    updateSearchInput(event.target.value)
   }
 
   const onClickCategory = categoryId => {
@@ -69,19 +69,18 @@ const FiltersGroup = props => {
 
   return (
     <div className="filters-group-container">
-      <form className="search-input-container" onSubmit={onSubmitHandler}>
+      <div className="search-input-container">
         <input
           type="search"
           placeholder="Search"
           className="search-input"
-          onChange={event => updateSearchInput(event.target.value)}
-          value={titleSearch}
+          onKeyDown={onChangeEvent}
         />
         <BsSearch className="icon" />
         <button type="submit" className="submit-btn">
           submit
         </button>
-      </form>
+      </div>
       <h1 className="form-group-heading">Category</h1>
       {renderCategoryButtons()}
       <h1 className="form-group-heading">Rating</h1>
